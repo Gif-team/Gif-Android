@@ -1,0 +1,40 @@
+name: idea_festival
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  flutter_typeahead: ^4.0.0
+  image_picker: ^0.8.4+8
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/logo.png
+    - assets/images/logo2.png
+    - assets/images/kakao_logo.png
+    - assets/images/search.png
+    - assets/images/sort.png
+    - assets/images/alarm.png
+    - assets/images/add.png
+    - assets/images/ex.png
+    - assets/images/camera.png
+    - assets/images/floor_icon.png
+    - assets/images/building_icon.png
+    - assets/images/found_icon.png
+    - assets/images/dropdown_icon.png
+    
