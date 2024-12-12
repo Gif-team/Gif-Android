@@ -1,8 +1,8 @@
 import 'package:final_test/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../start/start_assets.dart';
-import '../color/colorData.dart';
+import '../data/colorData.dart';
+import '../data/assets.dart';
 
 class Start extends StatelessWidget {
   const Start({super.key});
@@ -14,7 +14,7 @@ class Start extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(StartAssets.logo),
+          SvgPicture.asset(Assets.logo1),
           SizedBox(
             width: size.width * 0.5,
             height: 35,
