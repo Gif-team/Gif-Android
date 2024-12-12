@@ -1,4 +1,5 @@
 import 'package:final_test/data/colorData.dart';
+import 'package:final_test/mainPage/main_page.dart';
 
 import '../data/assets.dart';
 import 'package:final_test/signUp/sign_up.dart';
@@ -160,10 +161,9 @@ class _LoginState extends State<Login> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('로그인 성공!')),
               );
-
-              // 로그인 성공 시 다음 화면으로 이동 (예시)
-              // Navigator.push(context,
-              //   MaterialPageRoute(builder: (context) => HomePage()));
+              // main 페이지로 이동
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MainPage()));
             }
           });
         },
