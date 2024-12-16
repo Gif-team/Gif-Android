@@ -1,3 +1,4 @@
+import 'package:final_test/changePassWord/changePassWord.dart';
 import 'package:final_test/data/colorData.dart';
 import 'package:final_test/mainPage/main_page.dart';
 
@@ -195,16 +196,23 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-}
 
-Widget _changePassWordBtn() {
-  return TextButton(
-    onPressed: () {},
-    child: const Text(
-      '비밀번호 재설정',
-      style: TextStyle(
-        color: Color(0XFF3269F6),
+  Widget _changePassWordBtn() {
+    return TextButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChangePasswordPage(),
+          ),
+        );
+      },
+      child: const Text(
+        '비밀번호 재설정',
+        style: TextStyle(
+          color: Color(0XFF3269F6),
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
