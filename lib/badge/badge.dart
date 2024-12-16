@@ -10,11 +10,11 @@ class BadgePage extends StatelessWidget {
   final List<Map<String, dynamic>> badges = [
     {
       "badgeId": 1,
-      "trueOrFalse": true,
+      "trueOrFalse": false,
     },
     {
       "badgeId": 2,
-      "trueOrFalse": false,
+      "trueOrFalse": true,
     },
     {
       "badgeId": 3,
@@ -24,24 +24,86 @@ class BadgePage extends StatelessWidget {
 
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    Widget falseBox() {
+      return Container(
+        width: size.width * 0.3,
+        height: size.width * 0.3,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Color(0xFFD9D9D9),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBarCustom(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '뱆지',
+              '뱃지',
               style: TextStyle(
                 fontSize: size.width * 0.08,
                 fontWeight: FontWeight.w600,
               ),
             ),
+            SizedBox(
+              height: size.height * 0.015,
+            ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SvgPicture.asset(Assets.badge1),
-                SvgPicture.asset(Assets.badge2),
-                SvgPicture.asset(Assets.badge3),
+                Column(
+                  children: [
+                    badges[0]['trueOrFalse']
+                        ? SvgPicture.asset(
+                            Assets.badge1,
+                            width: size.width * 0.3,
+                          )
+                        : falseBox(),
+                    Text(
+                      '탐색왕',
+                      style: TextStyle(
+                          fontSize: size.width * 0.06,
+                          fontWeight: FontWeight.w600),
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    badges[1]['trueOrFalse']
+                        ? SvgPicture.asset(
+                            Assets.badge2,
+                            width: size.width * 0.3,
+                          )
+                        : falseBox(),
+                    Text(
+                      '깜빡이',
+                      style: TextStyle(
+                          fontSize: size.width * 0.06,
+                          fontWeight: FontWeight.w600),
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    badges[1]['trueOrFalse']
+                        ? SvgPicture.asset(
+                            Assets.badge3,
+                            width: size.width * 0.3,
+                          )
+                        : falseBox(),
+                    Text(
+                      '인기왕',
+                      style: TextStyle(
+                          fontSize: size.width * 0.06,
+                          fontWeight: FontWeight.w600),
+                    )
+                  ],
+                ),
               ],
             ),
           ],
