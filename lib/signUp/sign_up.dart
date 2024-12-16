@@ -121,14 +121,6 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  // 로고 이미지를 생성하는 위젯
-  Align _logoImage() {
-    return Align(
-      alignment: const Alignment(0, -1 / 1.2),
-      child: Image.asset('assets/images/logo.png'),
-    );
-  }
-
   // 텍스트 필드 위젯을 생성하는 메소드
   SizedBox _buildTextField({
     required TextEditingController controller,
