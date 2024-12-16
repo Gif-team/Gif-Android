@@ -165,7 +165,7 @@ class _MainPageState extends State<MainPage> {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: size.height * 0.05,
+                                      height: size.height * 0.035,
                                     ),
                                     Row(
                                       children: [

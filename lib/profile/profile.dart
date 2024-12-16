@@ -222,7 +222,7 @@ class _ProfileState extends State<Profile> {
                                 ),
                               ),
                               SizedBox(
-                                height: size.height * 0.05,
+                                height: size.height * 0.035,
                               ),
                               Row(
                                 children: [
