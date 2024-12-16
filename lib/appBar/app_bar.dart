@@ -1,4 +1,6 @@
 import 'package:final_test/data/colorData.dart';
+import 'package:final_test/mainPage/main_page.dart';
+import 'package:final_test/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../data/assets.dart';
@@ -21,14 +23,21 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Row(
           children: [
-            SvgPicture.asset(
-              Assets.logo1,
-              width: size.width * 0.04,
-              height: size.height * 0.04,
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainPage(),
+                    ));
+              },
+              icon: SvgPicture.asset(
+                Assets.logo1,
+                width: size.width * 0.035,
+                height: size.height * 0.035,
+              ),
             ),
-            SizedBox(
-              width: size.width*0.02,
-            ),
+
             Center(
               child: SearchBar(
                 backgroundColor: WidgetStatePropertyAll(ColorData.grayColor),
@@ -40,7 +49,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 constraints: BoxConstraints(
                   minHeight: size.height * 0.045,
-                  maxWidth: size.height * 0.3,
+                  maxWidth: size.width * 0.65,
                 ),
               ),
             ),
@@ -53,11 +62,18 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Profile(),
+                  ),
+                );
+              },
               icon: SvgPicture.asset(
                 Assets.profile,
-                height: size.height * 0.035,
-                width: size.width * 0.035,
+                height: size.height * 0.03,
+                width: size.width * 0.03,
               ),
             )
           ],
