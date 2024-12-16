@@ -1,3 +1,4 @@
+import 'package:final_test/mainPage/main_page.dart';
 import 'package:final_test/start/start.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white
       ),
-      home: Start(),
+      home: MainPage(),
     );
   }
 }
