@@ -1,5 +1,7 @@
 import 'package:final_test/appBar/app_bar.dart';
 import 'package:final_test/changePassWord/changePassWord.dart';
+import 'package:final_test/profile/profile_detail.dart';
+import 'package:final_test/start/start.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../data/assets.dart';
@@ -16,48 +18,55 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   String userName = '사용자';
 
-  final List<Map<String, dynamic>> postInfo = [
+  // 하드코딩된 게시물 데이터
+  List<Map<String, dynamic>> postInfo = [
     {
-      'title': '게시물 제목',
-      'image':
-          'https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/eDNQ/image/92MZWKbvqtzyta5_WkPIv4ZKFZw',
-      'gratuity': '1,000원',
-      'category': true,
-      'building': 1,
-      'floor': 1,
-      'realtime': 1,
-      'likeNumber': 0,
-      'like': false,
+      'postId': 1,
+      'details': {
+        'image':
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvk4CldcJ9R1fxhVjxP4b7TIER1SaHZAETBg&s',
+        'title': '버즈 찾습니다',
+        'price': 500,
+        'realtime': '2024-12-14',
+        'category': false,
+        'Building': {
+          'id': 1,
+          'floor': 4,
+        }
+      },
     },
     {
-      'title': '게시물 제목2',
-      'image': '',
-      'gratuity': '3,000원',
-      'category': false,
-      'building': 2,
-      'floor': 3,
-      'realtime': 3,
-      'likeNumber': 2,
-      'like': true,
+      'postId': 2,
+      'details': {
+        'image':
+            'https://sitem.ssgcdn.com/12/96/89/item/1000527899612_i1_750.jpg',
+        'title': '텀블러 찾았습니다',
+        'price': 700,
+        'realtime': '2024-12-15',
+        'category': true,
+        'Building': {
+          'id': 3,
+          'floor': 2,
+        }
+      },
     },
   ];
 
-  void likeToggle(int index) {
-    setState(() {
-      postInfo[index]['like'] = !postInfo[index]['like']; // 상태 반전
-      if (postInfo[index]['like']) {
-        postInfo[index]['likeNumber']++; // 좋아요 증가
-      } else {
-        postInfo[index]['likeNumber']--; // 좋아요 감소
-      }
-    });
+  void logout() {
+    // 로그아웃 시 앱의 시작 화면으로 이동
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => Start()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: const AppBarCustom(),
+      appBar: AppBarCustom(
+        onSearchChanged: (String value) {},
+      ),
       body: Column(
         children: [
           Padding(
@@ -108,20 +117,56 @@ class _ProfileState extends State<Profile> {
                           color: Colors.grey,
                         ),
                         buildTextButton('회원탈퇴', () {}),
-                        buildTextButton('로그아웃', () {}),
+                        buildTextButton('로그아웃', logout),
                         buildTextButton('뱃지 보기', () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => BadgePage(),
-                              ));
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      BadgePage(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                const begin = Offset(1.0, 0.0); // 오른쪽에서 왼쪽으로 이동
+                                const end = Offset.zero;
+                                const curve = Curves.ease;
+
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+                                var offsetAnimation = animation.drive(tween);
+
+                                return SlideTransition(
+                                  position: offsetAnimation,
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
                         }),
                         buildTextButton('비밀번호 변경', () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChangePasswordPage(),
-                              ));
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      ChangePasswordPage(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                const begin = Offset(1.0, 0.0); // 오른쪽에서 왼쪽으로 이동
+                                const end = Offset.zero;
+                                const curve = Curves.ease;
+
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+                                var offsetAnimation = animation.drive(tween);
+
+                                return SlideTransition(
+                                  position: offsetAnimation,
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
                         }),
                       ],
                     ),
@@ -135,7 +180,30 @@ class _ProfileState extends State<Profile> {
               itemCount: postInfo.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            ProfileDetail(postId: postInfo[index]['postId']),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(1.0, 0.0); // 아래에서 위로 이동
+                          const end = Offset.zero;
+                          const curve = Curves.ease;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
                   child: Card(
                     color: Colors.white,
                     margin: const EdgeInsets.symmetric(vertical: 1),
@@ -154,9 +222,11 @@ class _ProfileState extends State<Profile> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 16.0),
-                          child: postInfo[index]['image']?.isNotEmpty ?? false
+                          child: postInfo[index]['details']['image']
+                                      ?.isNotEmpty ??
+                                  false
                               ? Image.network(
-                                  postInfo[index]['image'],
+                                  postInfo[index]['details']['image'],
                                   width: size.width * 0.3,
                                   height: size.width * 0.3,
                                   fit: BoxFit.cover,
@@ -208,13 +278,15 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                postInfo[index]['title'],
+                                postInfo[index]['details']['title'],
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: size.width * 0.05),
                               ),
                               Text(
-                                '사례금: ' + postInfo[index]['gratuity'],
+                                '가격: ' +
+                                    postInfo[index]['details']['price']
+                                        .toString(),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: size.width * 0.04,
@@ -222,53 +294,21 @@ class _ProfileState extends State<Profile> {
                                 ),
                               ),
                               SizedBox(
-                                height: size.height * 0.035,
+                                height: size.height * 0.05,
                               ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: size.width * 0.4,
-                                    child: Text(
-                                      postInfo[index]['category']
-                                          ? '찾았습니다 ' +
-                                              '· ${postInfo[index]['floor']}층 ' +
-                                              '· ${_searchBuilding(postInfo[index]['building'])}'
-                                          : '찾습니다 ' +
-                                              '· ${postInfo[index]['floor']}층 ' +
-                                              '· ${_searchBuilding(postInfo[index]['building'])}',
-                                      style: TextStyle(
-                                        fontSize: size.width * 0.035,
-                                        color: Colors.black.withOpacity(0.5),
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {
-                                          likeToggle(index); // 좋아요 토글 함수 호출
-                                        },
-                                        icon: postInfo[index]['like']
-                                            ? const Icon(
-                                                Icons.favorite,
-                                                color: Colors.red,
-                                              )
-                                            : Icon(
-                                                Icons.favorite_border_outlined,
-                                                color: Colors.black
-                                                    .withOpacity(0.5),
-                                              ),
-                                      ),
-                                      Text(
-                                        '${postInfo[index]['likeNumber']}',
-                                        style: TextStyle(
-                                          fontSize: size.width * 0.035,
-                                          color: Colors.black.withOpacity(0.5),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                              Text(
+                                (postInfo[index]['details']['category'] ??
+                                        false)
+                                    ? '찾았습니다 ' +
+                                        '· ${postInfo[index]['details']['Building']['floor']}층 ' +
+                                        '· ${_searchBuilding(postInfo[index]['details']['Building']['id'])}'
+                                    : '찾습니다 ' +
+                                        '· ${postInfo[index]['details']['Building']['floor']}층 ' +
+                                        '· ${_searchBuilding(postInfo[index]['details']['Building']['id'])}',
+                                style: TextStyle(
+                                  fontSize: size.width * 0.035,
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
                               ),
                             ],
                           ),

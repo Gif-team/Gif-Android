@@ -1,8 +1,12 @@
-import 'package:final_test/data/colorData.dart';
+import 'package:final_test/Chating/chating_list.dart';
+import 'package:final_test/appBar/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../appBar/app_bar.dart';
-import '../data/assets.dart';
+import 'package:final_test/data/assets.dart';
+import 'package:final_test/data/colorData.dart';
+
+import '../detail/detail.dart';
+import '../edit/edit.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -12,52 +16,92 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  // postInfo를 클래스 필드로 선언
-  final List<Map<String, dynamic>> postInfo = [
+  List<Map<String, dynamic>> postInfo = [
     {
-      'title': '게시물 제목',
-      'image':
-      'https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/eDNQ/image/92MZWKbvqtzyta5_WkPIv4ZKFZw',
-      'gratuity': '1,000원',
-      'category': true,
-      'building': 1,
-      'floor': 1,
-      'realtime': 1,
-      'likeNumber': 0,
-      'like': false,
+      'postId': 1,
+      'details': {
+        'image':
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvk4CldcJ9R1fxhVjxP4b7TIER1SaHZAETBg&s',
+        'title': '버즈 찾습니다',
+        'price': 500,
+        'realtime': '2024-12-14',
+        'category': false,
+        'Building': {
+          'id': 1,
+          'floor': 4,
+        }
+      },
     },
     {
-      'title': '게시물 제목2',
-      'image': '',
-      'gratuity': '3,000원',
-      'category': false,
-      'building': 2,
-      'floor': 3,
-      'realtime': 3,
-      'likeNumber': 2,
-      'like': true,
+      'postId': 2,
+      'details': {
+        'image':
+            'https://sitem.ssgcdn.com/12/96/89/item/1000527899612_i1_750.jpg',
+        'title': '텀블러 찾았습니다',
+        'price': 700,
+        'realtime': '2024-12-15',
+        'category': true,
+        'Building': {
+          'id': 3,
+          'floor': 2,
+        }
+      },
+    },
+    {
+      'postId': 3,
+      'details': {
+        'image':
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTu50GCJ0gTPBXCZi_9aOd0tjWfl_L7f6IwA&s',
+        'title': '핸드폰 찾습니다',
+        'price': 300,
+        'realtime': '2024-12-15',
+        'category': false,
+        'Building': {
+          'id': 2,
+          'floor': 4,
+        }
+      },
     },
   ];
 
-  // 좋아요 토글 함수
-  void likeToggle(int index) {
+  String searchQuery = '';
+  String? selectedCategory;
+  int? selectedBuilding;
+  int? selectedFloor;
+
+  // 검색어 변경 시 호출되는 메서드
+  void _onSearchChanged(String query) {
     setState(() {
-      postInfo[index]['like'] = !postInfo[index]['like']; // 상태 반전
-      if (postInfo[index]['like']) {
-        postInfo[index]['likeNumber']++; // 좋아요 증가
-      } else {
-        postInfo[index]['likeNumber']--; // 좋아요 감소
-      }
+      searchQuery = query;
     });
   }
 
-  // 나머지 build 메서드는 기존 코드와 동일
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
+    // 필터링 함수
+    List<Map<String, dynamic>> getFilteredPosts() {
+      return postInfo.where((post) {
+        final title = post['details']['title'].toLowerCase();
+        final matchCategory = selectedCategory == null ||
+            post['details']['category'].toString() == selectedCategory;
+        final matchBuilding = selectedBuilding == null ||
+            post['details']['Building']['id'] == selectedBuilding;
+        final matchFloor = selectedFloor == null ||
+            post['details']['Building']['floor'] == selectedFloor;
+
+        return title.contains(searchQuery.toLowerCase()) &&
+            matchCategory &&
+            matchBuilding &&
+            matchFloor;
+      }).toList();
+    }
+
+    final filteredPosts = getFilteredPosts();
+
     return Scaffold(
-      appBar: const AppBarCustom(),
+      appBar: AppBarCustom(onSearchChanged: _onSearchChanged),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Stack(
@@ -74,10 +118,35 @@ class _MainPageState extends State<MainPage> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: postInfo.length,
+                    itemCount: filteredPosts.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation,
+                                      secondaryAnimation) =>
+                                  Detail(
+                                      postId: filteredPosts[index]['postId']),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                const begin = Offset(1.0, 0.0); // 오른쪽에서 왼쪽으로 이동
+                                const end = Offset.zero;
+                                const curve = Curves.ease;
+
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+                                var offsetAnimation = animation.drive(tween);
+
+                                return SlideTransition(
+                                  position: offsetAnimation,
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
+                        },
                         child: Card(
                           color: Colors.white,
                           margin: const EdgeInsets.symmetric(vertical: 1),
@@ -96,125 +165,62 @@ class _MainPageState extends State<MainPage> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 16.0, horizontal: 16.0),
-                                child: postInfo[index]['image']?.isNotEmpty ?? false
+                                child: filteredPosts[index]['details']['image']
+                                            .isNotEmpty ??
+                                        false
                                     ? Image.network(
-                                  postInfo[index]['image'],
-                                  width: size.width * 0.3,
-                                  height: size.width * 0.3,
-                                  fit: BoxFit.cover,
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    }
-                                    return Container(
-                                      width: size.width * 0.3,
-                                      height: size.width * 0.3,
-                                      color: Colors.grey[300],
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress
-                                              .expectedTotalBytes !=
-                                              null
-                                              ? loadingProgress
-                                              .cumulativeBytesLoaded /
-                                              (loadingProgress
-                                                  .expectedTotalBytes ??
-                                                  1)
-                                              : null,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Container(
-                                      width: size.width * 0.3,
-                                      height: size.width * 0.3,
-                                      color: Colors.grey,
-                                      child: Icon(Icons.broken_image,
-                                          color: Colors.white),
-                                    );
-                                  },
-                                )
+                                        filteredPosts[index]['details']
+                                            ['image'],
+                                        width: size.width * 0.3,
+                                        height: size.width * 0.3,
+                                        fit: BoxFit.cover,
+                                      )
                                     : Container(
-                                  color: Colors.grey,
-                                  width: size.width * 0.3,
-                                  height: size.width * 0.3,
-                                  child: Icon(Icons.image_not_supported,
-                                      color: Colors.white),
-                                ),
+                                        color: Colors.grey,
+                                        width: size.width * 0.3,
+                                        height: size.width * 0.3,
+                                        child: Icon(Icons.image_not_supported,
+                                            color: Colors.white),
+                                      ),
                               ),
                               Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      postInfo[index]['title'],
+                                      filteredPosts[index]['details']['title'],
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: size.width * 0.05),
                                     ),
                                     Text(
-                                      '사례금: ' + postInfo[index]['gratuity'],
+                                      '사례금: ' +
+                                          filteredPosts[index]['details']
+                                                  ['price']
+                                              .toString(),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: size.width * 0.04,
                                         color: Colors.black.withOpacity(0.6),
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: size.height * 0.035,
-                                    ),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: size.width * 0.4,
-                                          child: Text(
-                                            postInfo[index]['category']
-                                                ? '찾았습니다 ' +
-                                                '· ${postInfo[index]['floor']}층 ' +
-                                                '· ${_searchBuilding(postInfo[index]['building'])}'
-                                                : '찾습니다 ' +
-                                                '· ${postInfo[index]['floor']}층 ' +
-                                                '· ${_searchBuilding(postInfo[index]['building'])}',
-                                            style: TextStyle(
-                                              fontSize: size.width * 0.035,
-                                              color:
-                                              Colors.black.withOpacity(0.5),
-                                            ),
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            IconButton(
-                                              onPressed: () {
-                                                likeToggle(index); // 좋아요 토글 함수 호출
-                                              },
-                                              icon: postInfo[index]['like']
-                                                  ? const Icon(
-                                                Icons.favorite,
-                                                color: Colors.red,
-                                              )
-                                                  : Icon(
-                                                Icons
-                                                    .favorite_border_outlined,
-                                                color: Colors.black
-                                                    .withOpacity(0.5),
-                                              ),
-                                            ),
-                                            Text(
-                                              '${postInfo[index]['likeNumber']}',
-                                              style: TextStyle(
-                                                fontSize: size.width * 0.035,
-                                                color: Colors.black
-                                                    .withOpacity(0.5),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                    SizedBox(height: size.height * 0.05),
+                                    Text(
+                                      (filteredPosts[index]['details']
+                                                  ['category'] ??
+                                              false)
+                                          ? '찾았습니다 ' +
+                                              '· ${filteredPosts[index]['details']['Building']['floor']}층 ' +
+                                              '· ${_searchBuilding(filteredPosts[index]['details']['Building']['id'])}'
+                                          : '찾습니다 ' +
+                                              '· ${filteredPosts[index]['details']['Building']['floor']}층 ' +
+                                              '· ${_searchBuilding(filteredPosts[index]['details']['Building']['id'])}',
+                                      style: TextStyle(
+                                        fontSize: size.width * 0.035,
+                                        color: Colors.black.withOpacity(0.5),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -234,23 +240,55 @@ class _MainPageState extends State<MainPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatingList(),
+                          ));
+                    },
                     heroTag: 'chat',
                     backgroundColor: Colors.white,
                     elevation: 0,
                     child: SvgPicture.asset(Assets.chat_icon),
                   ),
-                  const SizedBox(height: 16), // 버튼 간격
+                  const SizedBox(height: 16),
                   FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  Edit(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(0.0, 1.0); // 아래에서 위로 이동
+                            const end = Offset.zero;
+                            const curve = Curves.ease;
+
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+                            var offsetAnimation = animation.drive(tween);
+
+                            return SlideTransition(
+                              position: offsetAnimation,
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
                     heroTag: 'add',
                     backgroundColor: Colors.white,
                     elevation: 0,
                     child: SvgPicture.asset(Assets.add_icon),
                   ),
-                  const SizedBox(height: 16), // 버튼 간격
+                  const SizedBox(height: 16),
                   FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _showFilterDialog();
+                    },
                     heroTag: 'flitter',
                     backgroundColor: Colors.white,
                     elevation: 0,
@@ -265,14 +303,103 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  String? _searchBuilding(int num) {
-    if (num == 1) {
-      return '기숙사';
-    } else if (num == 2) {
-      return '본관';
-    } else {
-      return '금봉관';
+  final Map<int, String> buildingNames = {
+    1: '기숙사',
+    2: '본관',
+    3: '금봉관',
+  };
+
+  String _searchBuilding(int num) => buildingNames[num] ?? '기타';
+
+  // 필터 다이얼로그 표시
+  void _showFilterDialog() {
+    // 필터 초기화 함수
+    void _resetFilters() {
+      setState(() {
+        selectedCategory = null;
+        selectedBuilding = null;
+        selectedFloor = null;
+      });
     }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('필터 설정'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButton<String>(
+                value: selectedCategory,
+                hint: const Text('카테고리 선택'),
+                items: ['true', 'false']
+                    .map((e) => DropdownMenuItem<String>(
+                          value: e,
+                          child: Text(e == 'true' ? '찾았습니다' : '찾습니다'),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value;
+                  });
+                },
+              ),
+              DropdownButton<int>(
+                value: selectedBuilding,
+                hint: const Text('건물 선택'),
+                items: buildingNames.entries
+                    .map((entry) => DropdownMenuItem<int>(
+                          value: entry.key,
+                          child: Text(entry.value),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedBuilding = value;
+                  });
+                },
+              ),
+              DropdownButton<int>(
+                value: selectedFloor,
+                hint: const Text('층 선택'),
+                items: List.generate(5, (index) => index + 1)
+                    .map((floor) => DropdownMenuItem<int>(
+                          value: floor,
+                          child: Text('$floor 층'),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedFloor = value;
+                  });
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('취소'),
+            ),
+            TextButton(
+              onPressed: () {
+                _resetFilters(); // 필터 초기화
+              },
+              child: const Text('적용 취소'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {}); // 필터 적용
+                Navigator.pop(context);
+              },
+              child: const Text('적용'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
-

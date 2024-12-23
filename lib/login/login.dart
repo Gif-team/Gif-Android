@@ -19,12 +19,58 @@ class _LoginState extends State<Login> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  // 오류 상태 관리
-  bool _hasError = false; // 이메일 또는 비밀번호 오류 여부
+  bool _hasError = false; // 오류 상태 관리
+  bool _isLoading = false; // 로딩 상태 관리
 
-  // 테스트용 고정 데이터 (실제 서버 통신 필요시 이 부분을 대체)
-  final String _testEmail = "test@example.com";
-  final String _testPassword = "password123";
+  final Map<String, String> mockUserData = {
+    'test@example.com': 'password123', // 이메일: 비밀번호
+  };
+
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true; // 로딩 상태 활성화
+    });
+
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    try {
+      // 이메일과 비밀번호가 임시 데이터와 일치하는지 확인
+      if (mockUserData.containsKey(email) && mockUserData[email] == password) {
+        setState(() {
+          _hasError = false; // 오류 상태 해제
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('로그인 성공!')),
+
+        );
+
+        // main 페이지로 이동 (애니메이션 추가)
+        Navigator.push(
+          context,
+          _createSlideTransitionRoute(const MainPage()),
+        );
+      } else {
+        setState(() {
+          _hasError = true; // 오류 상태 활성화
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('아이디와 비밀번호를 다시 한 번 확인해주세요.')),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        _hasError = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('오류가 발생했습니다. 다시 시도해주세요.')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false; // 로딩 상태 비활성화
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +88,7 @@ class _LoginState extends State<Login> {
                   SvgPicture.asset(
                     Assets.logo1,
                     placeholderBuilder: (context) =>
-                        const CircularProgressIndicator(),
+                    const CircularProgressIndicator(),
                   ),
                   const SizedBox(height: 20),
                   const SizedBox(height: 10),
@@ -66,7 +112,9 @@ class _LoginState extends State<Login> {
                       '아이디와 비밀번호를 다시 한 번 확인해주세요.',
                       style: TextStyle(color: Colors.red, fontSize: 14),
                     ),
-                  _loginBtn(context),
+                  _isLoading
+                      ? const CircularProgressIndicator()
+                      : _loginBtn(context),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -84,13 +132,31 @@ class _LoginState extends State<Login> {
     );
   }
 
-  // 텍스트 필드 위젯 생성
+  // 페이지 이동 애니메이션
+  PageRouteBuilder _createSlideTransitionRoute(Widget page) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return page;
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, 1.0); // 시작 위치 (아래에서)
+        var end = Offset.zero; // 끝 위치 (현재 위치)
+        var curve = Curves.easeInOut; // 부드러운 커브 애니메이션
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(position: offsetAnimation, child: child);
+      },
+      transitionDuration: const Duration(milliseconds: 400), // 애니메이션 속도 조정
+    );
+  }
+
   SizedBox _buildTextField({
     required TextEditingController controller,
     required String label,
     required String hintText,
     bool obscureText = false,
-    required bool errorState, // 오류 상태 관리
+    required bool errorState,
   }) {
     return SizedBox(
       width: 350,
@@ -100,7 +166,7 @@ class _LoginState extends State<Login> {
           Text(
             label,
             style: TextStyle(
-              color: errorState ? Colors.red : Colors.black, // 오류 시 라벨 색상 변경
+              color: errorState ? Colors.red : Colors.black,
             ),
           ),
           const SizedBox(height: 3),
@@ -133,7 +199,7 @@ class _LoginState extends State<Login> {
               ),
             ),
             style: TextStyle(
-              color: errorState ? Colors.red : Colors.black, // 입력 텍스트 색상 변경
+              color: errorState ? Colors.red : Colors.black,
             ),
           ),
         ],
@@ -141,7 +207,6 @@ class _LoginState extends State<Login> {
     );
   }
 
-  // 로그인 버튼
   SizedBox _loginBtn(BuildContext context) {
     return SizedBox(
       width: 350,
@@ -149,25 +214,7 @@ class _LoginState extends State<Login> {
         style: ElevatedButton.styleFrom(
           backgroundColor: ColorData.mainColor,
         ),
-        onPressed: () {
-          setState(() {
-            // 이메일과 비밀번호 검증
-            if (_emailController.text != _testEmail ||
-                _passwordController.text != _testPassword) {
-              _hasError = true; // 오류 상태 활성화
-            } else {
-              _hasError = false; // 오류 상태 해제
-
-              // 성공적인 로그인 처리
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('로그인 성공!')),
-              );
-              // main 페이지로 이동
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MainPage()));
-            }
-          });
-        },
+        onPressed: _login,
         child: const Text(
           '로그인',
           style: TextStyle(color: Colors.white),
@@ -176,15 +223,12 @@ class _LoginState extends State<Login> {
     );
   }
 
-  // 회원가입 버튼
   TextButton _signUpBtn() {
     return TextButton(
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => const SignUp(),
-          ),
+          _createSlideTransitionRoute(const SignUp()),
         );
       },
       child: const Text(
@@ -202,9 +246,7 @@ class _LoginState extends State<Login> {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => ChangePasswordPage(),
-          ),
+          _createSlideTransitionRoute(ChangePasswordPage()),
         );
       },
       child: const Text(
