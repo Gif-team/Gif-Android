@@ -39,6 +39,7 @@ dependencies:
   asset_fill: ^2.0.0
   flutter_speed_dial:
   image_picker: ^1.1.2
+  mime:
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,8 @@ flutter:
     - assets/images/logo/
     - assets/images/badge/
     - assets/images/edit/
+    - assets/images/edit/dropDown/
+    - assets/images/edit/dropDown/floor/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
