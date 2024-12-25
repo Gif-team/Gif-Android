@@ -82,8 +82,8 @@ class _EditState extends State<Edit> {
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(
                         image,
-                        width: size.width * 0.3,
-                        height: size.width * 0.3,
+                        width: size.width * 0.27,
+                        height: size.width * 0.27,
                         fit: BoxFit.cover, // 이미지 비율 유지
                       ),
                     ),
@@ -94,7 +94,7 @@ class _EditState extends State<Edit> {
                     onPressed: _pickImage, // 이미지 선택 함수 호출
                     icon: SvgPicture.asset(
                       Assets.camera,
-                      width: size.width * 0.3,
+                      width: size.width * 0.27,
                     ),
                   ),
               ],
