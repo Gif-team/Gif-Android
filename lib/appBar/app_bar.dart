@@ -5,9 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../data/assets.dart';
 
-class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarCustom({super.key});
+class AppBarCustom extends StatefulWidget implements PreferredSizeWidget {
+  final ValueChanged<String> onSearchChanged; // 콜백 함수
 
+  const AppBarCustom({super.key, required this.onSearchChanged});
+
+  @override
+  _AppBarCustomState createState() => _AppBarCustomState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _AppBarCustomState extends State<AppBarCustom> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -26,10 +36,24 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
             IconButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainPage(),
-                    ));
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => MainPage(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(0, 1); // 오른쪽에서 왼쪽으로 이동
+                      const end = Offset.zero;
+                      const curve = Curves.ease;
+
+                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+
+                      return SlideTransition(
+                        position: offsetAnimation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
               },
               icon: SvgPicture.asset(
                 Assets.logo1,
@@ -51,6 +75,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
                   minHeight: size.height * 0.045,
                   maxWidth: size.width * 0.65,
                 ),
+                onChanged: widget.onSearchChanged, // 콜백 함수 호출
               ),
             ),
             IconButton(
@@ -65,8 +90,21 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => Profile(),
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => Profile(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0); // 오른쪽에서 왼쪽으로 이동
+                      const end = Offset.zero;
+                      const curve = Curves.ease;
+
+                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+
+                      return SlideTransition(
+                        position: offsetAnimation,
+                        child: child,
+                      );
+                    },
                   ),
                 );
               },
@@ -75,14 +113,11 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
                 height: size.height * 0.03,
                 width: size.width * 0.03,
               ),
-            )
+            ),
+
           ],
         ),
       ],
     );
   }
-
-  // AppBar의 기본 높이 지정
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
