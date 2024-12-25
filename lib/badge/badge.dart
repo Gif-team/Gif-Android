@@ -7,21 +7,13 @@ class BadgePage extends StatelessWidget {
   BadgePage({super.key});
 
   @override
-  final List<Map<String, dynamic>> badges = [
-    {
-      "badgeId": 1,
-      "trueOrFalse": false,
-    },
-    {
-      "badgeId": 2,
-      "trueOrFalse": true,
-    },
-    {
-      "badgeId": 3,
-      "trueOrFalse": false,
-    },
-  ];
+  final Map<String, bool> badges = {
+    "badge1": true,
+    "badge2": true,
+    "badge3": false,
+  };
 
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
@@ -37,7 +29,7 @@ class BadgePage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBarCustom(),
+      appBar: AppBarCustom(onSearchChanged: (String value) {  },),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -58,11 +50,11 @@ class BadgePage extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    badges[0]['trueOrFalse']
+                    badges["badge1"]!
                         ? SvgPicture.asset(
-                            Assets.badge1,
-                            width: size.width * 0.3,
-                          )
+                      Assets.badge1,
+                      width: size.width * 0.3,
+                    )
                         : falseBox(),
                     Text(
                       '탐색왕',
@@ -74,11 +66,11 @@ class BadgePage extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    badges[1]['trueOrFalse']
+                    badges["badge2"]!
                         ? SvgPicture.asset(
-                            Assets.badge2,
-                            width: size.width * 0.3,
-                          )
+                      Assets.badge2,
+                      width: size.width * 0.3,
+                    )
                         : falseBox(),
                     Text(
                       '깜빡이',
@@ -90,11 +82,11 @@ class BadgePage extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    badges[1]['trueOrFalse']
+                    badges["badge3"]!
                         ? SvgPicture.asset(
-                            Assets.badge3,
-                            width: size.width * 0.3,
-                          )
+                      Assets.badge3,
+                      width: size.width * 0.3,
+                    )
                         : falseBox(),
                     Text(
                       '인기왕',
