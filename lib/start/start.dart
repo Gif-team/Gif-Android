@@ -27,9 +27,7 @@ class Start extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => Login(),
-                    ),
+                    _createSlideTransitionRoute(),
                   );
                 },
                 child: const Text(
@@ -43,6 +41,25 @@ class Start extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  PageRouteBuilder _createSlideTransitionRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return const Login();
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, 1.0); // 시작 위치 (아래에서)
+        var end = Offset.zero; // 끝 위치 (현재 위치)
+        var curve = Curves.easeInQuad; // 부드러운 커브 애니메이션
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        // 자연스러운 애니메이션을 위해 작은 딜레이와 함께 적용
+        return SlideTransition(position: offsetAnimation, child: child);
+      },
+      transitionDuration: const Duration(milliseconds: 500), // 애니메이션 속도 조정
     );
   }
 }

@@ -1,8 +1,8 @@
-import 'package:final_test/login/login.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../data/assets.dart';
 import '../data/colorData.dart';
+import '../login/login.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -19,35 +19,42 @@ class _SignUpState extends State<SignUp> {
   bool _emailHasError = false;
   bool _passWordHasError = false;
   bool _rePassWordHasError = false;
+  bool _isLoading = false; // 로딩 상태
 
+  // 이메일 유효성 검사
   String? validateEmail(String value) {
     if (value.isEmpty) {
       return '이메일을 입력하세요';
     } else {
       String pattern =
-          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.]*)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
       RegExp regExp = RegExp(pattern);
       if (!regExp.hasMatch(value)) {
         return '올바른 이메일 주소를 입력하세요.';
+      } else if (!value.endsWith('@gsm.hs.kr')) {
+        return '@gsm.hs.kr 도메인의 이메일만 가능합니다.';
       } else {
-        return null; //null을 반환하면 정상
+        return null;
       }
     }
   }
 
+  // 비밀번호 유효성 검사
   String? validatePassword(String value) {
     String pattern =
-        r'^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,15}$';
+        r'^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,15}$';
     RegExp regExp = RegExp(pattern);
 
     if (value.isEmpty) {
       return '비밀번호를 입력하세요';
-    }  else if (!regExp.hasMatch(value) || value.length < 8) {
+    } else if (!regExp.hasMatch(value) || value.length < 8) {
       return '특수문자, 문자, 숫자 포함 8자 이상으로 적어주세요.';
     } else {
-      return null; //null을 반환하면 정상
+      return null;
     }
   }
+
+  // 서버 통신 부분 삭제
 
   @override
   Widget build(BuildContext context) {
@@ -100,11 +107,13 @@ class _SignUpState extends State<SignUp> {
                     } else if (value != _passWordController.text) {
                       return '비밀번호가 일치하지 않아요.';
                     }
-                    return null; // 정상 상태
+                    return null;
                   },
                 ),
                 const SizedBox(height: 20),
-                _signUpBtn(context),
+                _isLoading
+                    ? const CircularProgressIndicator()
+                    : _signUpBtn(context),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -121,7 +130,6 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  // 텍스트 필드 위젯을 생성하는 메소드
   SizedBox _buildTextField({
     required TextEditingController controller,
     required String label,
@@ -185,7 +193,6 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  // 공통 입력 경계 스타일
   OutlineInputBorder _inputBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(14),
@@ -193,7 +200,6 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  // 회원가입 버튼 위젯을 생성하는 메소드
   SizedBox _signUpBtn(BuildContext context) {
     return SizedBox(
       width: 350,
@@ -203,11 +209,7 @@ class _SignUpState extends State<SignUp> {
         ),
         onPressed: () {
           if (_formKey.currentState?.validate() ?? false) {
-            // 회원가입 버튼 클릭 시 수행할 동작 정의
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Login()),
-            );
+            // 회원가입 버튼을 클릭하면 아무 일도 일어나지 않음
           }
         },
         child: const Text(
@@ -218,7 +220,6 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  // 로그인 버튼 위젯을 생성하는 메소드
   TextButton _loginBtn(BuildContext context) {
     return TextButton(
       onPressed: () {
