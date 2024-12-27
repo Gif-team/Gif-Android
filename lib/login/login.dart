@@ -41,7 +41,7 @@ class _LoginState extends State<Login> {
           _hasError = false; // 오류 상태 해제
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('로그인 성공!')),
+          const SnackBar(content: Text('로그인 성공!')),
 
         );
 
@@ -55,7 +55,7 @@ class _LoginState extends State<Login> {
           _hasError = true; // 오류 상태 활성화
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('아이디와 비밀번호를 다시 한 번 확인해주세요.')),
+          const SnackBar(content: Text('아이디와 비밀번호를 다시 한 번 확인해주세요.')),
         );
       }
     } catch (e) {
@@ -63,7 +63,7 @@ class _LoginState extends State<Login> {
         _hasError = true;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('오류가 발생했습니다. 다시 시도해주세요.')),
+        const SnackBar(content: Text('오류가 발생했습니다. 다시 시도해주세요.')),
       );
     } finally {
       setState(() {
@@ -139,7 +139,7 @@ class _LoginState extends State<Login> {
         return page;
       },
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0); // 시작 위치 (아래에서)
+        var begin = const Offset(0.0, 1.0); // 시작 위치 (아래에서)
         var end = Offset.zero; // 끝 위치 (현재 위치)
         var curve = Curves.easeInOut; // 부드러운 커브 애니메이션
         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
@@ -246,7 +246,7 @@ class _LoginState extends State<Login> {
       onPressed: () {
         Navigator.push(
           context,
-          _createSlideTransitionRoute(ChangePasswordPage()),
+          _createSlideTransitionRoute(const ChangePasswordPage()),
         );
       },
       child: const Text(

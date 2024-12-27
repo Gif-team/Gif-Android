@@ -23,7 +23,7 @@ class BadgePage extends StatelessWidget {
         height: size.width * 0.3,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Color(0xFFD9D9D9),
+          color: const Color(0xFFD9D9D9),
         ),
       );
     }

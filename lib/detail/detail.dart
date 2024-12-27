@@ -130,7 +130,7 @@ class _DetailState extends State<Detail> {
 
     if (post == null) {
       // 해당 ID의 게시글이 없으면 에러 처리
-      return Scaffold(
+      return const Scaffold(
         body: Center(child: Text("게시글을 찾을 수 없습니다.")),
       );
     }
@@ -204,7 +204,7 @@ class _DetailState extends State<Detail> {
                       SizedBox(width: size.width * 0.02),
                       Text(
                         post['writer'],
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ],
@@ -214,7 +214,7 @@ class _DetailState extends State<Detail> {
                       backgroundColor: ColorData.mainColor,
                     ),
                     onPressed: () {},
-                    child: Text(
+                    child: const Text(
                       '채팅하기',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -224,27 +224,27 @@ class _DetailState extends State<Detail> {
               SizedBox(height: size.height * 0.02),
 
               // 구분선
-              Divider(color: const Color(0xFF7E8EF1), thickness: 1.5),
+              const Divider(color: Color(0xFF7E8EF1), thickness: 1.5),
 
               // 게시글 상세 정보
               Text(
                 post['title'],
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: size.height * 0.01),
               Text(
                 "${post['category'] ? '찾습니다' : '잃어버렸습니다'} · ${post['realtime']}",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
               ),
               SizedBox(height: size.height * 0.01),
               Text(
                 "사례금 : ${post['price']}",
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
               SizedBox(height: size.height * 0.02),
               Text(
                 post['content'],
-                style: TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 14),
                 textAlign: TextAlign.start,
               ),
               SizedBox(height: size.height * 0.02),
@@ -262,7 +262,7 @@ class _DetailState extends State<Detail> {
                   ),
                   Text(
                     '$_likeNumber',
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),

@@ -80,7 +80,7 @@ class _ChatingState extends State<Chating> with WidgetsBindingObserver {
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 100), // 애니메이션 속도 조정
+        duration: const Duration(milliseconds: 100), // 애니메이션 속도 조정
         curve: Curves.easeOut,
       );
     }
@@ -117,7 +117,7 @@ class _ChatingState extends State<Chating> with WidgetsBindingObserver {
       body: Column(
         children: [
           // 사용자 정보 영역
-          Container(
+          SizedBox(
             height: size.height * 0.1,
             child: Center(
               child: Row(
@@ -142,7 +142,7 @@ class _ChatingState extends State<Chating> with WidgetsBindingObserver {
           ),
           line(),
           // 게시물 정보 영역
-          Container(
+          SizedBox(
             height: size.height * 0.15, // 고정된 높이 설정
             child: Row(
               children: [
@@ -209,8 +209,8 @@ class _ChatingState extends State<Chating> with WidgetsBindingObserver {
                     ),
                     decoration: BoxDecoration(
                       color: message.isUser
-                          ? Color(0xFFEEEEEE)
-                          : Color(0xFF7E8EF1), // 메시지 색상 구분
+                          ? const Color(0xFFEEEEEE)
+                          : const Color(0xFF7E8EF1), // 메시지 색상 구분
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: message.imagePath != null
@@ -239,7 +239,7 @@ class _ChatingState extends State<Chating> with WidgetsBindingObserver {
                   MediaQuery.of(context).viewInsets.bottom, // 키보드 높이만큼 패딩 추가
             ),
             child: Container(
-              color: Color(0xFF615EFC),
+              color: const Color(0xFF615EFC),
               child: Row(
                 children: <Widget>[
                   IconButton(
@@ -267,7 +267,7 @@ class _ChatingState extends State<Chating> with WidgetsBindingObserver {
                       padding: EdgeInsets.symmetric(
                         vertical: size.height * 0.02, // 반응형 높이 패딩
                       ),
-                      child: Container(
+                      child: SizedBox(
                         height: size.height * 0.06,
                         child: TextField(
                           controller: _controller,

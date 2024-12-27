@@ -179,7 +179,7 @@ class _MainPageState extends State<MainPage> {
                                         color: Colors.grey,
                                         width: size.width * 0.3,
                                         height: size.width * 0.3,
-                                        child: Icon(Icons.image_not_supported,
+                                        child: const Icon(Icons.image_not_supported,
                                             color: Colors.white),
                                       ),
                               ),

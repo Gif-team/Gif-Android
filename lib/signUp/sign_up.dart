@@ -19,7 +19,7 @@ class _SignUpState extends State<SignUp> {
   bool _emailHasError = false;
   bool _passWordHasError = false;
   bool _rePassWordHasError = false;
-  bool _isLoading = false; // 로딩 상태
+  final bool _isLoading = false; // 로딩 상태
 
   // 이메일 유효성 검사
   String? validateEmail(String value) {
@@ -226,7 +226,7 @@ class _SignUpState extends State<SignUp> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Login(),
+            builder: (context) => const Login(),
           ),
         );
       },

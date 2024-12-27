@@ -24,7 +24,7 @@ class _AppBarCustomState extends State<AppBarCustom> {
     return AppBar(
       backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
-      shape: Border(
+      shape: const Border(
         bottom: BorderSide(
           color: ColorData.mainColor,
           width: 1,
@@ -38,7 +38,7 @@ class _AppBarCustomState extends State<AppBarCustom> {
                 Navigator.push(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => MainPage(),
+                    pageBuilder: (context, animation, secondaryAnimation) => const MainPage(),
                     transitionsBuilder: (context, animation, secondaryAnimation, child) {
                       const begin = Offset(0, 1); // 오른쪽에서 왼쪽으로 이동
                       const end = Offset.zero;
@@ -64,8 +64,8 @@ class _AppBarCustomState extends State<AppBarCustom> {
 
             Center(
               child: SearchBar(
-                backgroundColor: WidgetStatePropertyAll(ColorData.grayColor),
-                elevation: WidgetStatePropertyAll(0),
+                backgroundColor: const WidgetStatePropertyAll(ColorData.grayColor),
+                elevation: const WidgetStatePropertyAll(0),
                 leading: SvgPicture.asset(
                   Assets.search,
                   height: size.height * 0.03,
@@ -91,7 +91,7 @@ class _AppBarCustomState extends State<AppBarCustom> {
                 Navigator.push(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => Profile(),
+                    pageBuilder: (context, animation, secondaryAnimation) => const Profile(),
                     transitionsBuilder: (context, animation, secondaryAnimation, child) {
                       const begin = Offset(1.0, 0.0); // 오른쪽에서 왼쪽으로 이동
                       const end = Offset.zero;

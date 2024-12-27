@@ -55,7 +55,7 @@ class _EditState extends State<Edit> {
     } else {
       // 이미지가 3개를 초과할 경우 경고 메시지 표시
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('이미지는 최대 3개까지 선택할 수 있습니다.')),
+        const SnackBar(content: Text('이미지는 최대 3개까지 선택할 수 있습니다.')),
       );
     }
   }
@@ -99,7 +99,7 @@ class _EditState extends State<Edit> {
                   ),
               ],
             ),
-            Divider(thickness: 1.0), // 구분선
+            const Divider(thickness: 1.0), // 구분선
 
             // 제목 입력 필드
             TextField(
@@ -181,8 +181,8 @@ class _EditState extends State<Edit> {
                       child: Row(
                         children: [
                           SvgPicture.asset(Assets.find),
-                          SizedBox(width: 8),
-                          Text('찾았습니다'),
+                          const SizedBox(width: 8),
+                          const Text('찾았습니다'),
                         ],
                       ),
                     ),
@@ -191,8 +191,8 @@ class _EditState extends State<Edit> {
                       child: Row(
                         children: [
                           SvgPicture.asset(Assets.lost),
-                          SizedBox(width: 8),
-                          Text('잃어버렸습니다'),
+                          const SizedBox(width: 8),
+                          const Text('잃어버렸습니다'),
                         ],
                       ),
                     ),
@@ -213,8 +213,8 @@ class _EditState extends State<Edit> {
                       child: Row(
                         children: [
                           SvgPicture.asset(Assets.dormitory),
-                          SizedBox(width: 8),
-                          Text('기숙사'),
+                          const SizedBox(width: 8),
+                          const Text('기숙사'),
                         ],
                       ),
                     ),
@@ -223,8 +223,8 @@ class _EditState extends State<Edit> {
                       child: Row(
                         children: [
                           SvgPicture.asset(Assets.mainBuilding),
-                          SizedBox(width: 8),
-                          Text('본관'),
+                          const SizedBox(width: 8),
+                          const Text('본관'),
                         ],
                       ),
                     ),
@@ -233,8 +233,8 @@ class _EditState extends State<Edit> {
                       child: Row(
                         children: [
                           SvgPicture.asset(Assets.geumbong),
-                          SizedBox(width: 8),
-                          Text('금봉관'),
+                          const SizedBox(width: 8),
+                          const Text('금봉관'),
                         ],
                       ),
                     ),
@@ -254,7 +254,7 @@ class _EditState extends State<Edit> {
                       value: index + 1,
                       child: Row(
                         children: [
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Text('${index + 1}층'),
                         ],
                       ),
@@ -283,16 +283,16 @@ class _EditState extends State<Edit> {
                     print('이미지 수: ${_images.length}');
 
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('게시물 작성 완료!')),
+                      const SnackBar(content: Text('게시물 작성 완료!')),
                     );
                   } else {
                     // 폼 검증 실패 시 경고 메시지
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('모든 필드를 채워주세요.')),
+                      const SnackBar(content: Text('모든 필드를 채워주세요.')),
                     );
                   }
                 },
-                child: Text(
+                child: const Text(
                   '추가하기',
                   style: TextStyle(
                     color: Colors.white,
@@ -315,7 +315,7 @@ class _EditState extends State<Edit> {
       value: value,
       onChanged: onChanged,
       items: items,
-      icon: Icon(
+      icon: const Icon(
         Icons.arrow_drop_down,
         size: 30,
       ),

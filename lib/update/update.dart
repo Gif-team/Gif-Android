@@ -76,7 +76,7 @@ class _UpdatePostState extends State<UpdatePost> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('이미지는 최대 3개까지 선택할 수 있습니다.')),
+        const SnackBar(content: Text('이미지는 최대 3개까지 선택할 수 있습니다.')),
       );
     }
   }
@@ -85,11 +85,11 @@ class _UpdatePostState extends State<UpdatePost> {
     if (_isFormValid()) {
       // 수정 완료 시뮬레이션
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('게시물이 수정되었습니다. (임시 데이터 처리)')),
+        const SnackBar(content: Text('게시물이 수정되었습니다. (임시 데이터 처리)')),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('모든 필드를 채워주세요.')),
+        const SnackBar(content: Text('모든 필드를 채워주세요.')),
       );
     }
   }
@@ -129,7 +129,7 @@ class _UpdatePostState extends State<UpdatePost> {
                   ),
               ],
             ),
-            Divider(thickness: 1.0),
+            const Divider(thickness: 1.0),
             TextField(
               controller: _titleController,
               decoration: InputDecoration(
@@ -203,8 +203,8 @@ class _UpdatePostState extends State<UpdatePost> {
                       child: Row(
                         children: [
                           SvgPicture.asset(Assets.find),
-                          SizedBox(width: 8),
-                          Text('찾았습니다'),
+                          const SizedBox(width: 8),
+                          const Text('찾았습니다'),
                         ],
                       ),
                     ),
@@ -213,8 +213,8 @@ class _UpdatePostState extends State<UpdatePost> {
                       child: Row(
                         children: [
                           SvgPicture.asset(Assets.lost),
-                          SizedBox(width: 8),
-                          Text('잃어버렸습니다'),
+                          const SizedBox(width: 8),
+                          const Text('잃어버렸습니다'),
                         ],
                       ),
                     ),
@@ -233,8 +233,8 @@ class _UpdatePostState extends State<UpdatePost> {
                       child: Row(
                         children: [
                           SvgPicture.asset(Assets.dormitory),
-                          SizedBox(width: 8),
-                          Text('기숙사'),
+                          const SizedBox(width: 8),
+                          const Text('기숙사'),
                         ],
                       ),
                     ),
@@ -243,8 +243,8 @@ class _UpdatePostState extends State<UpdatePost> {
                       child: Row(
                         children: [
                           SvgPicture.asset(Assets.mainBuilding),
-                          SizedBox(width: 8),
-                          Text('본관'),
+                          const SizedBox(width: 8),
+                          const Text('본관'),
                         ],
                       ),
                     ),
@@ -253,8 +253,8 @@ class _UpdatePostState extends State<UpdatePost> {
                       child: Row(
                         children: [
                           SvgPicture.asset(Assets.geumbong),
-                          SizedBox(width: 8),
-                          Text('금봉관'),
+                          const SizedBox(width: 8),
+                          const Text('금봉관'),
                         ],
                       ),
                     ),
@@ -282,7 +282,7 @@ class _UpdatePostState extends State<UpdatePost> {
                 backgroundColor: ColorData.mainColor,
               ),
               onPressed: _updatePost,
-              child: Text(
+              child: const Text(
                 '수정하기',
                 style: TextStyle(color: Colors.white),
               ),
@@ -302,7 +302,7 @@ class _UpdatePostState extends State<UpdatePost> {
       value: value,
       onChanged: onChanged,
       items: items,
-      icon: Icon(
+      icon: const Icon(
         Icons.arrow_drop_down,
         size: 30,
       ),

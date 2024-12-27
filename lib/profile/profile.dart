@@ -56,7 +56,7 @@ class _ProfileState extends State<Profile> {
     // 로그아웃 시 앱의 시작 화면으로 이동
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => Start()),
+      MaterialPageRoute(builder: (context) => const Start()),
     );
   }
 
@@ -149,7 +149,7 @@ class _ProfileState extends State<Profile> {
                             PageRouteBuilder(
                               pageBuilder:
                                   (context, animation, secondaryAnimation) =>
-                                      ChangePasswordPage(),
+                                      const ChangePasswordPage(),
                               transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) {
                                 const begin = Offset(1.0, 0.0); // 오른쪽에서 왼쪽으로 이동
@@ -259,7 +259,7 @@ class _ProfileState extends State<Profile> {
                                       width: size.width * 0.3,
                                       height: size.width * 0.3,
                                       color: Colors.grey,
-                                      child: Icon(Icons.broken_image,
+                                      child: const Icon(Icons.broken_image,
                                           color: Colors.white),
                                     );
                                   },
@@ -268,7 +268,7 @@ class _ProfileState extends State<Profile> {
                                   color: Colors.grey,
                                   width: size.width * 0.3,
                                   height: size.width * 0.3,
-                                  child: Icon(Icons.image_not_supported,
+                                  child: const Icon(Icons.image_not_supported,
                                       color: Colors.white),
                                 ),
                         ),
@@ -330,7 +330,7 @@ class _ProfileState extends State<Profile> {
       onPressed: onPressed,
       child: Text(
         buttonText,
-        style: TextStyle(color: Colors.grey),
+        style: const TextStyle(color: Colors.grey),
       ),
     );
   }
